@@ -42,6 +42,11 @@ public class WebController {
         return "onboarding";
     }
 
+    @GetMapping("/chatbot")
+    public String chatbot() {
+        return "chatbot-ui";
+    }
+
     @GetMapping("/")
     public String dashboard(Model model) {
 
@@ -154,8 +159,9 @@ public class WebController {
     public String profile() {
         return "profile";
     }
+
     @GetMapping("/audit-logs")
-public String auditLogs() {
-    return "audit-logs";
-}
+    public String auditLogs() {
+        return "audit-logs";
+    }
 }
