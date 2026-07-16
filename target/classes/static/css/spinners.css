@@ -1,6 +1,3 @@
-
-/* spinners.css - Placeholder: created to resolve missing CSS file warnings */
-
 /* Loading Spinner Styles */
 .spinner-overlay {
     position: fixed;
@@ -113,4 +110,3 @@
     0%, 100% { transform: scaleY(0.5); }
     50% { transform: scaleY(1); }
 }
-

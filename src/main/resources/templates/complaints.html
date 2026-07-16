@@ -20,6 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/ui.css" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/back-to-top.css">
     <link rel="stylesheet" href="/css/print.css" media="print">
     <link rel="stylesheet" href="/css/hover-effects.css">
@@ -75,6 +76,9 @@
     }
 </script>
 
+
+    <link rel="stylesheet" href="/css/spinners.css">
+
 </head>
 <body>
 
@@ -83,9 +87,11 @@
     <div class="spinner"></div>
 </div>
 
+
 <!-- Back to Top Button (created by JS) -->
 
 <!-- Navbar with mobile toggler -->
+
 <nav class="navbar navbar-expand-lg navbar-dark app-nav">
     <div class="container">
         <a class="navbar-brand fw-bold" href="/"><i class="fas fa-robot me-2"></i>Virtual Customer Success Manager</a>
@@ -109,6 +115,7 @@
 </nav>
 
 <div class="container mt-4">
+
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
         <h4 class="fw-bold mb-0"><i class="fas fa-exclamation-circle text-purple me-2"></i>Complaint Management</h4>
         <div class="d-flex gap-2 flex-wrap">
@@ -123,6 +130,14 @@
                 <span class="btn-text"><i class="fas fa-plus me-1"></i>New Complaint</span>
             </button>
         </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold"><i class="fas fa-exclamation-circle text-purple me-2"></i>Complaint Management</h4>
+        <button class="btn btn-purple" data-bs-toggle="modal" data-bs-target="#fileComplaintModal">
+            <span class="btn-spinner"></span>
+            <span class="btn-text"><i class="fas fa-plus me-1"></i>New Complaint</span>
+        </button>
+
     </div>
 
     <!-- Stats Row -->
@@ -322,6 +337,7 @@
                         </td>
                         <td th:text="${#temporals.format(c.createdAt, 'dd MMM yyyy')}">Date</td>
                         <td>
+
                             <button class="btn btn-sm btn-outline-secondary me-1" onclick="updateComplaintStatus(this, ${c.id})">
                                 <span class="btn-spinner"></span>
                                 <span class="btn-text">Update</span>
@@ -336,6 +352,11 @@
                             <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteComplaint(${c.id})">
                                 <span class="btn-spinner"></span>
                                 <span class="btn-text">Delete</span>
+
+                            <button class="btn btn-xs btn-outline-secondary" onclick="updateComplaintStatus(this, ${c.id})">
+                                <span class="btn-spinner"></span>
+                                <span class="btn-text">Update</span>
+
                             </button>
                         </td>
                     </tr>
@@ -419,12 +440,21 @@
                     <textarea id="m_desc" class="form-control" rows="3" placeholder="Describe the issue in detail"></textarea>
                 </div>
             </div>
+
             <div class="modal-footer flex-column flex-sm-row">
                 <button type="button" class="btn btn-secondary w-100 w-sm-auto" data-bs-dismiss="modal">
                     <span class="btn-spinner"></span>
                     <span class="btn-text">Cancel</span>
                 </button>
                 <button type="button" class="btn btn-purple w-100 w-sm-auto" onclick="submitComplaint()">
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span class="btn-spinner"></span>
+                    <span class="btn-text">Cancel</span>
+                </button>
+                <button type="button" class="btn btn-purple" onclick="submitComplaint()">
+
                     <span class="btn-spinner"></span>
                     <span class="btn-text">Submit Complaint</span>
                 </button>
@@ -465,6 +495,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/spinners.js"></script>
+
 <script src="/js/shortcuts.js"></script>
 <script src="/js/toast-notifications.js"></script>
 <script src="/js/back-to-top.js"></script>
@@ -478,6 +509,9 @@
         window.toast = toast;
     }
     
+
+<script>
+
     // Hide spinner when page loads
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
@@ -486,6 +520,7 @@
                 spinner.classList.remove('active');
             }
         }, 300);
+
         
         setTimeout(function() {
             if (typeof toast !== 'undefined') {
@@ -674,6 +709,13 @@
     // ===== SUBMIT COMPLAINT =====
     function submitComplaint() {
         const btn = event.target.closest('button');
+
+    });
+
+    // Modified submitComplaint with spinner
+    function submitComplaint() {
+        const btn = event.target;
+
         if (btn && btn.classList) {
             btn.classList.add('loading');
         }
@@ -684,11 +726,15 @@
         const desc = document.getElementById('m_desc').value;
         
         if (!name || !category || !desc) {
+
             if (typeof toast !== 'undefined') {
                 toast.error('Please fill all required fields', 'Validation Error');
             } else {
                 alert('Please fill all required fields');
             }
+
+            alert('Please fill all required fields');
+
             if (btn) btn.classList.remove('loading');
             return;
         }
@@ -708,6 +754,7 @@
         .then(data => {
             if (btn) btn.classList.remove('loading');
             if (data.id) {
+
                 if (typeof toast !== 'undefined') {
                     toast.success(`Complaint #${data.id} filed with priority ${data.priority || 'MEDIUM'}!`, 'Success');
                 }
@@ -716,10 +763,17 @@
                 if (typeof toast !== 'undefined') {
                     toast.error('Failed to file complaint', 'Error');
                 }
+
+                alert('Complaint filed! ID: ' + data.id);
+                location.reload();
+            } else {
+                alert('Error: ' + JSON.stringify(data));
+
             }
         })
         .catch(err => {
             if (btn) btn.classList.remove('loading');
+
             if (typeof toast !== 'undefined') {
                 toast.error('Network error. Please try again.', 'Error');
             }
@@ -727,6 +781,13 @@
     }
 
     // ===== UPDATE STATUS =====
+
+            alert('Network error. Please try again.');
+        });
+    }
+
+    // Modified updateComplaintStatus with spinner
+
     function updateComplaintStatus(btn, id) {
         btn.classList.add('loading');
         
@@ -736,6 +797,7 @@
             return;
         }
         
+
         fetch(`/api/complaints/${id}/status?status=${newStatus}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' }
@@ -922,6 +984,26 @@
         .catch(err => {
             input.disabled = false;
             if (typeof toast !== 'undefined') toast.error('Failed to post comment', 'Error');
+
+        fetch(`/api/complaints/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.classList.remove('loading');
+            if (data.id) {
+                alert('Status updated!');
+                location.reload();
+            } else {
+                alert('Error updating status');
+            }
+        })
+        .catch(err => {
+            btn.classList.remove('loading');
+            alert('Network error. Please try again.');
+
         });
     }
 </script>
